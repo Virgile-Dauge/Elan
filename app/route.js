@@ -6,4 +6,6 @@ module.exports = function (app, database, io, router) {
     res.render('index.ejs');
   });
   
+  /* FRONT END PD */
+  
 }
