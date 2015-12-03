@@ -14,10 +14,14 @@ var FileStore = require('session-file-store')(session);
 
 
 /**** Custom libraries ****/
+var database = require('./libs/database.js');
 
 
 /**** App configuration ****/
+app.engine('html', require('ejs').renderFile);
+
 app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
@@ -25,14 +29,6 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-/* 1 day cookie */
-var my_session = session({
-  store: new FileStore(),
-  secret: 'NDIThomasKilian2015',
-  saveUninitialized: true,
-  resave: true,
-  duration: 60 * 60 * 1000 * 24
-});
 
 app.use(cookieParser());
 app.use(my_session);
@@ -45,8 +41,8 @@ io.use(ios(my_session));
 
 
 /**** Include routing & socket ****/
-//require('./app/routes.js')(app, database, drive, io, passport, router, xlsxj);
-//require('./app/socket.js')(app, database, drive, io, router, script_parrain, up_pho);
+require('./app/routes.js')(app, database, io, router);
+require('./app/REST.js')(app, database, io, router);
 
 
 /**** Connection DB - Server ****/

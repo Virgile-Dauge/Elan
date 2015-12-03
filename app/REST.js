@@ -1,5 +1,5 @@
 /* Handles the routing queries */
-module.exports = function (app, io, router) {
+module.exports = function (app, database, io, router) {
 
   
 }
