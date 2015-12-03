@@ -1,2 +1,6 @@
 Thomas Le Saux
+<<<<<<< HEAD
 Kilian Cuny
+=======
+Quentin Bruel
+>>>>>>> f691b965628137799390b6eb17c93e77357c83d8
