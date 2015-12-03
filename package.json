@@ -1,5 +1,5 @@
 {
-  "name": "NDI_2016",
+  "name": "NDI_2015",
   "version": "0.1.0",
   "dependencies": {
     "body-parser": "~1.0.1",
@@ -11,6 +11,6 @@
     "mysql": "^2.7.0",
     "session-file-store": "0.0.18",
     "socket.io": "1.3.5",
-    "socket.io-express-session": "0.1.2",
+    "socket.io-express-session": "0.1.2"
   }
 }
