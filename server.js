@@ -31,23 +31,17 @@ app.use(bodyParser.urlencoded({
 
 
 app.use(cookieParser());
-app.use(my_session);
 
 app.use('/', router);
 
-
-/**** IO session config ****/
-io.use(ios(my_session));
-
-
 /**** Include routing & socket ****/
-require('./app/routes.js')(app, database, io, router);
+require('./app/route.js')(app, database, io, router);
 require('./app/REST.js')(app, database, io, router);
 
 
 /**** Connection DB - Server ****/
-database.connect('', '', '', '');
+database.connect('localhost', 'root', 'roger12345', 'elan');
 
 
 /**** Listenning ****/
-server.listen(80);
+server.listen(8080);
