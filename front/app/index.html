@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html ng-app="app">
+<html ng-app="app" style="height:100%;">
 
 <head>
   <meta charset="utf-8">
@@ -14,13 +14,13 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
   <style>
-    .angular-google-map-container { height: 600px; }
+    .angular-google-map-container { height: 1000px; }
   </style>
 
 </head>
-<body ng-controller="mainCtrl">
+<body ng-controller="mainCtrl as vm" style="height:100%;">
 
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default" style="width:100%; position:absolute;top:0px; z-index:10; margin:0px;">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -73,20 +73,19 @@
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
-  <div ng-controller="mainCtrl as vm">
-    <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN">
-      <shape name="circle" ng-repeat="city in vm.cities" no-watcher="true"
-        stroke-color="#FF0000"
-        stroke-opacity="0.8"
-        stroke-weight="2"
-        fill-color="#FF0000"
-        fill-opacity="0.35"
-        center="{{city.position}}"
-        radius="{{vm.getRadius(city.population)}}">
-      </shape>
-    </ng-map>
-  </div>
-
+  <div style="height:100%;">
+  <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;">
+    <shape name="circle" ng-repeat="city in vm.cities" no-watcher="true"
+      stroke-color="#FF0000"
+      stroke-opacity="0.8"
+      stroke-weight="2"
+      fill-color="#FF0000"
+      fill-opacity="0.35"
+      center="{{city.position}}"
+      radius="{{vm.getRadius(city.population)}}">
+    </shape>
+  </ng-map>
+</div>
 
 
 
