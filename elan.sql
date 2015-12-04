@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10deb1
+-- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Jeu 03 Décembre 2015 à 21:19
--- Version du serveur: 5.5.46-0ubuntu0.14.04.2
--- Version de PHP: 5.5.9-1ubuntu4.14
+-- Généré le: Ven 04 Décembre 2015 à 01:12
+-- Version du serveur: 5.6.12-log
+-- Version de PHP: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,14 +19,16 @@ SET time_zone = "+00:00";
 --
 -- Base de données: `elan`
 --
+CREATE DATABASE IF NOT EXISTS `elan` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `elan`;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `AssoEventHashtag`
+-- Structure de la table `assoeventhashtag`
 --
 
-CREATE TABLE IF NOT EXISTS `AssoEventHashtag` (
+CREATE TABLE IF NOT EXISTS `assoeventhashtag` (
   `Ev_id` int(9) NOT NULL,
   `H_id` int(9) NOT NULL,
   PRIMARY KEY (`Ev_id`,`H_id`)
@@ -35,27 +37,34 @@ CREATE TABLE IF NOT EXISTS `AssoEventHashtag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Event`
+-- Structure de la table `event`
 --
 
-CREATE TABLE IF NOT EXISTS `Event` (
+CREATE TABLE IF NOT EXISTS `event` (
   `Ev_id` int(9) NOT NULL AUTO_INCREMENT,
-  `Ev_date` date NOT NULL,
-  `Ev_lg` double NOT NULL,
-  `Ev_lat` double NOT NULL,
+  `Ev_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Ev_lg` double(10,6) NOT NULL,
+  `Ev_lat` double(7,6) NOT NULL,
   `Ev_descr` varchar(200) NOT NULL,
   `Ev_traite` tinyint(1) NOT NULL,
-  `Ev_prio` int(2) NOT NULL,
+  `Ev_nb_tweet` int(2) NOT NULL,
   PRIMARY KEY (`Ev_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `event`
+--
+
+INSERT INTO `event` (`Ev_id`, `Ev_date`, `Ev_lg`, `Ev_lat`, `Ev_descr`, `Ev_traite`, `Ev_nb_tweet`) VALUES
+(1, '2015-12-04 00:46:35', 48.714407, 2.426664, '#feu', 0, 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Hashtag`
+-- Structure de la table `hashtag`
 --
 
-CREATE TABLE IF NOT EXISTS `Hashtag` (
+CREATE TABLE IF NOT EXISTS `hashtag` (
   `H_id` int(9) NOT NULL AUTO_INCREMENT,
   `H_nom` varchar(100) NOT NULL,
   `H_safe_zone` double NOT NULL,
@@ -63,10 +72,10 @@ CREATE TABLE IF NOT EXISTS `Hashtag` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
--- Contenu de la table `Hashtag`
+-- Contenu de la table `hashtag`
 --
 
-INSERT INTO `Hashtag` (`H_id`, `H_nom`, `H_safe_zone`) VALUES
+INSERT INTO `hashtag` (`H_id`, `H_nom`, `H_safe_zone`) VALUES
 (1, 'Feu', 1000),
 (2, 'Incendie', 1000),
 (3, 'Seisme', 10000),
