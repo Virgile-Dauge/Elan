@@ -1,5 +1,10 @@
-app.controller('mainCtrl', ['$scope',function($scope) {
+app.controller('mainCtrl', function(NgMap) {
   var vm = this;
+
+  NgMap.getMap().then(function(map) {
+    vm.map = map;
+  });
+
   vm.events = [
     {name:'incendie', color : '#db712b', population:2714856, position: [41.878113, -87.629798]},
     {name:'tsunami', color : '#2a8bb3', population:8405837, position: [40.714352, -74.005973]},
@@ -9,4 +14,17 @@ app.controller('mainCtrl', ['$scope',function($scope) {
   vm.getRadius = function(num) {
     return Math.sqrt(num) * 100;
   }
-}]);
+
+  var cEvent = vm.events[0]; 
+
+  vm.showDetail = function(e, cEvent) {
+    vm.cEvent = cEvent;
+    console.log(cEvent.name);
+    vm.map.showInfoWindow('infow');
+  };
+
+  vm.hideDetail = function() {
+    vm.map.hideInfoWindow('infow');
+  };
+
+});
