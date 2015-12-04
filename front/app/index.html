@@ -75,14 +75,14 @@
   </nav>
   <div style="height:100%;">
   <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;">
-    <shape name="circle" ng-repeat="city in vm.cities" no-watcher="true"
-      stroke-color="#FF0000"
+    <shape name="circle" ng-repeat="event in vm.events" no-watcher="true"
+      stroke-color={{event.color}}
       stroke-opacity="0.8"
       stroke-weight="2"
-      fill-color="#FF0000"
+      fill-color={{event.color}}
       fill-opacity="0.35"
-      center="{{city.position}}"
-      radius="{{vm.getRadius(city.population)}}">
+      center="{{event.position}}"
+      radius="{{vm.getRadius(event.population)}}">
     </shape>
   </ng-map>
 </div>
