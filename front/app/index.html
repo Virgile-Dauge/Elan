@@ -3,59 +3,74 @@
 <html ng-app="app" style="height:100%;">
 
 <head>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Nuit de l'info : ELAN</title>
+  <title>ELAN</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="game/game.css">
 
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="components/startbootstrap-freelancer-1.0.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="components/startbootstrap-freelancer-1.0.4/css/freelancer.css">
 
   <style>
     .angular-google-map-container { height: 1000px; }
   </style>
 
-</head>
 <body ng-controller="mainCtrl as vm" style="height:100%;">
 
   <nav class="navbar navbar-default" style="width:100%; position:absolute;top:0px; z-index:10; margin:0px;">
     <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <input places-auto-complete size=80
-        class="form-control"
-        ng-model="vm.address"
-        types="{{types}}"
-        on-place-changed="vm.placeChanged()" />
+      <div class="navbar-header" >
+        <a class="navbar-brand" href="#">
+          <img style="max-height:200%;max-width:200%; margin-top: -7px;" src="img/Logo.png" alt="ELAN">
+        </a>
+        <p class="navbar-text" style="font-family: lobster">E.L.A.N.</p>
       </div>
+      <div class="navbar-form navbar-right" role="search">
+        <input places-auto-complete style="width: 350px"
+               class="form-control"
+               ng-model="vm.address"
+               types="{{types}}"
+               on-place-changed="vm.placeChanged()" />
+        <button type="button" class="btn btn-default navbar-btn">A propos</button>
+
+      </div>
+
     </div><!-- /.container-fluid -->
   </nav>
-  
+
 
 
 
   <div style="height:100%;">
-  <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;" on-click="vm.hideAside()">
-    <shape id='{{myEvent.name}}' name="circle" ng-repeat="myEvent in vm.events" no-watcher="true"
-      stroke-color={{myEvent.color}}
-      stroke-opacity="0.8"
-      stroke-weight="2"
-      fill-color={{myEvent.color}}
-      fill-opacity="0.35"
-      center="{{myEvent.position}}"
-      radius="{{vm.getRadius(myEvent.population)}}"
-      on-mouseover="vm.showDetail(myEvent)"
-      on-mouseout="vm.hideDetail(myEvent)"
-      on-click="vm.showAside(myEvent)">
-    </shape>
-    <info-window id='infow' position='{{vm.cEvent.position}}'>
-      <div ng-non-bindable>
-        {{vm.cEvent.name}}
-      </div>
-    </info-window>
-  </ng-map>
+    <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;" on-click="vm.hideAside()">
+      <div ng-repeat="myEvent in vm.events | orderBy:'-position[0]':reverse">
+      <shape id='{{myEvent.name}}' name="circle"  no-watcher="true"
+        stroke-color={{myEvent.color}}
+        stroke-opacity="0.8"
+        stroke-weight="2"
+        fill-color={{myEvent.color}}
+        fill-opacity="0.35"
+        center="{{myEvent.position}}"
+        radius="{{vm.getRadius(myEvent.population)}}"
+        on-mouseover="vm.showDetail(myEvent)"
+        on-mouseout="vm.hideDetail(myEvent)"
+        on-click="vm.showAside(myEvent)">
+      </shape>
+      <custom-marker id="can" position="{{myEvent.position}}">
+            <img style="height:100px;" ng-src="img/{{myEvent.name}}.png"/ >
+      </custom-marker>
+    </div>
+      <info-window id='infow' position='{{vm.cEvent.position}}'>
+        <div ng-non-bindable>
+          {{vm.cEvent.name}}
+        </div>
+      </info-window>
+    </ng-map>
 </div>
 <div id="aside">
 
@@ -65,48 +80,50 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-  <script src="node_modules/angular/angular.js"></script>
-  <script src="node_modules/angular-route/angular-route.min.js"></script>
-
-  <script src='node_modules/angular-simple-logger/dist/angular-simple-logger.min.js'></script>
-  <script src='node_modules/angular-google-maps/dist/angular-google-maps.min.js'></script>
-  <script src='node_modules/lodash/lodash.js'></script>
-  <script src='node_modules/ngmap/build/scripts/ng-map.min.js'></script>
-  <script src="http://maps.google.com/maps/api/js?libraries=places"></script>
-
-  <script src="js/app.js"></script>
-  <script src="js/controler.js"></script>
-  <script src="js/directive.js"></script>
-  <script src="js/routes.js"></script>
-  <script src="js/services.js"></script>
-
-
-
-  <script src="components/version/version-directive.js"></script>
-  <script src="components/version/interpolate-filter.js"></script>
-
-  <!--script>
-    var aside = document.querySelector("#aside");
-
-    document.addEventListener("click", function () {
-
-      var width = 300,
-          i = 0,
-          fn = function () {
-              aside.style.width = i +"px";
-              if (i < width) {
-                  i+=5;
-                  setTimeout(function () {
-                      fn();
-                  }, 10);
-              }
-          };
-      fn();
-    })
-  </script-->
 </body>
+<script src="components/startbootstrap-freelancer-1.0.4/js/jquery.js"></script>
+<script src="components/startbootstrap-freelancer-1.0.4/js/contact_me.js"></script>
+<script src="components/startbootstrap-freelancer-1.0.4/js/jqBootstrapValidation.js"></script>
+<script src="components/startbootstrap-freelancer-1.0.4/js/cbpAnimatedHeader.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="components/startbootstrap-freelancer-1.0.4/js/bootstrap.min.js"></script>
+<script src="components/startbootstrap-freelancer-1.0.4/js/freelancer.js"></script>
+
+
+
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+<script src="node_modules/angular/angular.js"></script>
+<script src="node_modules/angular-route/angular-route.min.js"></script>
+
+<script src='node_modules/angular-simple-logger/dist/angular-simple-logger.min.js'></script>
+<script src='node_modules/angular-google-maps/dist/angular-google-maps.min.js'></script>
+<script src='node_modules/lodash/lodash.js'></script>
+<script src='node_modules/ngmap/build/scripts/ng-map.min.js'></script>
+<script src="http://maps.google.com/maps/api/js?libraries=places"></script>
+
+<script src="js/app.js"></script>
+<script src="js/controler.js"></script>
+<script src="js/directive.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/services.js"></script>
+
+<script src="components/version/version-directive.js"></script>
+<script src="components/version/interpolate-filter.js"></script>
+
+<script src="game/game.js"></script>
+
+<script>
+  game.on("defeat", function (level) {
+    console.log("defeat");
+    console.log(level);
+  });
+
+  game.on("victory", function (level) {
+    console.log("victory");
+    console.log(level);
+  });
+</script>
+
 </html>
