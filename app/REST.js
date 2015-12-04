@@ -1,39 +1,18 @@
 /* Handles the routing queries */
 module.exports = function (app, client, database, io, router, twitter) {
 
-  router.get('/event', function (req, res) {
+  router.get('/events', function (req, res) {
 
-    var myQuery = "SELECT H_nom FROM Hashtag";
+    var myQuery = "SELECT * FROM event";
+    console.log("here");
     database.executeQuery(myQuery, function (res) {
-      var track = "";
-      for (var i = 0; i < res.length; i++) {
-        track = track + "#" + res[i].H_nom;
-        if( i != res.length -1)
-          track = track + ",";
+      var json=[];
+      for( var i = 0; i < res.length; i++){
+        json.push(JSON.stringify({date: res[i].Ev_date, lattitude: res[i].Ev_lat, longitude: res[i].Ev_lg, description: res[i].Ev_descr, priority:res[i].Ev_nb_tweet}));
       }
-      console.log(track);
-
-      client.stream('statuses/filter', {
-        track: track
-      }, function (stream) {
-        stream.on('data', function (tweet) {
-          if(tweet.place != null){
-            console.log(tweet.place.bounding_box.coordinates[0][0][0]);
-            console.log(tweet.place.bounding_box.coordinates[0][0][1]);
-            console.log(tweet.text);
-           
-            myQuery = "INSERT INTO 
-            database.executeQuery
-          }
-          else console.log("VTTF");
-        });
-
-        stream.on('error', function (error) {
-          throw error;
-        });
-      });
+      
+      console.log(json);     
     });
-    res.render("index.ejs");
-  });
+  })
 
 }

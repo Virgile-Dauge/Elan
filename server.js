@@ -46,9 +46,34 @@ app.use('/', router);
 require('./app/route.js')(app, database, io, router, twitter);
 require('./app/REST.js')(app, client, database, io, router, twitter);
 
-
 /**** Connection DB - Server ****/
 database.connect('localhost', 'root', 'roger12345', 'elan');
+
+database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
+  var track = "";
+  for (var i = 0; i < res.length; i++) {
+    track = track + "#" + res[i].H_nom;
+    if (i != res.length - 1)
+      track = track + ",";
+  }
+  console.log(track);
+
+  client.stream('statuses/filter', {
+    track: track
+  }, function (stream) {
+    stream.on('data', function (tweet) {
+      if (tweet.place != null) {
+        console.log(tweet.place.bounding_box.coordinates[0][0][0]);
+        console.log(tweet.place.bounding_box.coordinates[0][0][1]);
+        console.log(tweet.text);
+      }
+    },
+
+    stream.on('error', function (error) {
+      throw error;
+    })
+  )});
+});
 
 
 /**** Listenning ****/
