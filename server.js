@@ -145,6 +145,7 @@ router.get('/events', function (req, res) {
   var myQuery = "SELECT * FROM event, assoeventhashtag, hashtag natural join";
   database.executeQuery(myQuery, function (res) {
     var json = [];
+    //BLABLA
     for (var i = 0; i < res.length; i++) {
       json.push(JSON.stringify({
         name: res[i].H_nom,
