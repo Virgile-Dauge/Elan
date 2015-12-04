@@ -16,6 +16,7 @@ module.exports = function (app, client, database, io, router, twitter) {
           nb_tweet: res[i].Ev_nb_tweet
         }));
       }
+
       result.send(json);
     });
   });
