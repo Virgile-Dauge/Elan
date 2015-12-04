@@ -74,16 +74,16 @@
     </div><!-- /.container-fluid -->
   </nav>
   <div style="height:100%;">
-  
+
   <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;" on-click="map.hideInfoWindow(event, 'bar')">
-    <shape name="circle" ng-repeat="city in vm.cities" no-watcher="true"
-      stroke-color="#FF0000"
+    <shape name="circle" ng-repeat="myEvent in vm.events" no-watcher="true"
+      stroke-color={{myEvent.color}}
       stroke-opacity="0.8"
       stroke-weight="2"
-      fill-color="#FF0000"
+      fill-color={{myEvent.color}}
       fill-opacity="0.35"
-      center="{{city.position}}"
-      radius="{{vm.getRadius(city.population)}}"
+      center="{{myEvent.position}}"
+      radius="{{vm.getRadius(myEvent.population)}}"
       on-mouseover="map.showInfoWindow(event, 'bar')">
     </shape>
     <info-window id="bar" position="41.878113, -87.629798">
