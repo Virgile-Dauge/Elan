@@ -23,7 +23,7 @@
 <body ng-controller="mainCtrl as vm" style="height:100%;">
 
   <nav class="navbar navbar-default" style="width:100%; position:absolute;top:0px; z-index:10; margin:0px;">
-    <div class="container-fluid">      
+    <div class="container-fluid">
       <div class="navbar-header" >
         <a class="navbar-brand" href="#">
           <img style="max-height:200%;max-width:200%; margin-top: -7px;" src="img/Logo.png" alt="ELAN">
@@ -42,29 +42,34 @@
 
     </div><!-- /.container-fluid -->
   </nav>
-  
+
 
 
 
   <div style="height:100%;">
-  <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;">
-    <shape id='{{myEvent.name}}' name="circle" ng-repeat="myEvent in vm.events" no-watcher="true"
-      stroke-color={{myEvent.color}}
-      stroke-opacity="0.8"
-      stroke-weight="2"
-      fill-color={{myEvent.color}}
-      fill-opacity="0.35"
-      center="{{myEvent.position}}"
-      radius="{{vm.getRadius(myEvent.population)}}"
-      on-mouseover="vm.showDetail(myEvent)"
-      on-mouseout="vm.hideDetail(myEvent)">
-    </shape>
-    <info-window id='infow' position='{{vm.cEvent.position}}'>
-      <div ng-non-bindable>
-        {{vm.cEvent.name}}
-      </div>
-    </info-window>
-  </ng-map>
+    <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;">
+      <div ng-repeat="myEvent in vm.events | orderBy:'-position[0]':reverse">
+      <shape id='{{myEvent.name}}' name="circle"  no-watcher="true"
+        stroke-color={{myEvent.color}}
+        stroke-opacity="0.8"
+        stroke-weight="2"
+        fill-color={{myEvent.color}}
+        fill-opacity="0.35"
+        center="{{myEvent.position}}"
+        radius="{{vm.getRadius(myEvent.population)}}"
+        on-mouseover="vm.showDetail(myEvent)"
+        on-mouseout="vm.hideDetail(myEvent)">
+      </shape>
+      <custom-marker id="can" position="{{myEvent.position}}">
+            <img style="height:100px;" ng-src="img/{{myEvent.name}}.png"/ >
+      </custom-marker>
+    </div>
+      <info-window id='infow' position='{{vm.cEvent.position}}'>
+        <div ng-non-bindable>
+          {{vm.cEvent.name}}
+        </div>
+      </info-window>
+    </ng-map>
 </div>
 
   <!--[if lt IE 7]>
