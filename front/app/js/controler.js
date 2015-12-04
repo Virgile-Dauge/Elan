@@ -1,10 +1,14 @@
 
-app.controller('mainCtrl', function($scope, NgMap,myService) {
+app.controller('mainCtrl', function($scope, NgMap,myService, $location) {
   var vm = this;
 
     NgMap.getMap().then(function(map) {
     vm.map = map;
   });
+
+  $scope.changeView = function(){
+    $location.path('/apropos');
+  };
 
   myService.callAPI().then(function(response) {
     console.log(response.data);
