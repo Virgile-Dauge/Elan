@@ -47,7 +47,7 @@ require('./app/route.js')(app, database, io, router, twitter);
 require('./app/REST.js')(app, client, database, io, router, twitter);
 
 /**** Connection DB - Server ****/
-database.connect('localhost', 'root', 'roger12345', 'elan');
+database.connect('localhost', 'root', 'p4nd4', 'ndi');
 
 database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
   var track = "";
@@ -77,4 +77,4 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 
 
 /**** Listenning ****/
-server.listen(443);
+server.listen(80);
