@@ -46,30 +46,6 @@ app.use('/', router);
 
 
 /**** Connection DB - Server ****/
-var users = {
-   "user1" : {
-      "name" : "mahesh",
-	  "password" : "password1",
-	  "profession" : "teacher",
-	  "id": 1
-   },
-   "user2" : {
-      "name" : "suresh",
-	  "password" : "password2",
-	  "profession" : "librarian",
-	  "id": 2
-   },
-   "user3" : {
-      "name" : "ramesh",
-	  "password" : "password3",
-	  "profession" : "clerk",
-	  "id": 3
-   }
-};
-router.get('/listUsers', function (req, res) {
-       console.log( users );
-       res.send( users );
-   });
 //database.connect('localhost', 'root', 'roger12345', 'elan');
 database.connect('localhost', 'root', 'p4nd4', 'ndi');
 database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
@@ -165,6 +141,23 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	    });
 	});
 });
+router.get('/events', function (req, res) {
+  var myQuery = "SELECT * FROM event, assoeventhashtag, hashtag natural join";
+  database.executeQuery(myQuery, function (res) {
+    var json = [];
+    for (var i = 0; i < res.length; i++) {
+      json.push(JSON.stringify({
+        name: res[i].H_nom,
+        id: res[i].Ev_id,
+        date: res[i].Ev_date,
+        lattitude: res[i].Ev_lat,
+        longitude: res[i].Ev_lg,
+        description: res[i].Ev_descr,
+        nb_tweet: res[i].Ev_nb_tweet
+      }));
+    }
+    result.send(json);;
+});
 module.exports = router;
 /**** Listenning ****/
-server.listen(80);
+server.listen(443);
