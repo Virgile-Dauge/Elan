@@ -10,6 +10,35 @@ app.controller('mainCtrl', function($scope, NgMap,myService, $location) {
     $location.path('/apropos');
   };
 
+  $scope.centerMap = function(){
+
+    if (navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    else
+      alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+
+    function successCallback(position){
+      myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      //vm.map.setCenter(myLatLng);
+      vm.map.panTo(myLatLng);
+      vm.map.setZoom(10);
+    };
+
+    function errorCallback(error){
+      switch(error.code){
+        case error.PERMISSION_DENIED:
+          alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+          break;
+        case error.TIMEOUT:
+          alert("Le service n'a pas répondu à temps");
+          break;
+      }
+    };
+  };
+
   myService.callAPI().then(function(response) {
     console.log(response.data);
     vm.events = response.data;
