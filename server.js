@@ -74,45 +74,67 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	        for(var i = 0; i < hashtags.length; i++)
 	          console.log(hashtags[i]);
 
-	        var queryLgLat = "SELECT Ev_lg, Ev_lat FROM Event";
+	        var queryLgLat = "SELECT Ev_id, Ev_lg, Ev_lat FROM Event";
 	        database.executeQuery(queryLgLat, function (result) {
-	          var ok = true;
-	          for (var i = 0; i < result.length; i++) {
-	            var lg = result[i].Ev_lg;
-	            var lat = result[i].Ev_lat;
-	            var epsilon = 0.008992482;
-	            if(Math.abs(lg-lng_tweet) <= epsilon && Math.abs(lat-lat_tweet) <= epsilon){
-	              ok = false;
-	            }
-	          }
-	          if(ok){
-	            var queryInsertEvent = "INSERT INTO Event (Ev_Date, Ev_lg, Ev_lat, Ev_descr, Ev_traite, Ev_nb_tweets) VALUES (NOW(), " +
-	                   lng_tweet + ", " + lat_tweet + ", \"" + tweet.text + "\", FALSE, 1)";
-	            database.executeQuery(queryInsertEvent);
+	          	var ok = true;
+	          	var Ev_id = -1;
+	          	for (var i = 0; i < result.length; i++) {
+		            var lg = result[i].Ev_lg;
+		            var lat = result[i].Ev_lat;
+		            var epsilon = 0.008992482;
+		            //Same coordinates
+		            if(Math.abs(lg-lng_tweet) <= epsilon && Math.abs(lat-lat_tweet) <= epsilon){
+		            	Ev_id = result[i].Ev_id;
+		            	var queryHid = "SELECT H_nom FROM Hashtag h, AssoEventHashtag a WHERE a.Ev_id = " + Ev_id + " AND a.H_id = h.H_id";
+		            	ok = false;
+		            	//# that are bounds to an event		            	
+		            	database.executeQuery(queryHid, function (resu) {
+		            		for(var j = 0; j < resu.length; j++)
+		            			for(var k = 0; k < hashtags.length; k++)
+		            				if(resu[j].H_nom == hashtags[k]){
+		            					ok = true;
+		            				}
+		            	});
+		            }
+	          	}
 
-	            var queryEvid = "SELECT Ev_id FROM Event WHERE Ev_lg = " + lng_tweet + " AND Ev_lat = " + lat_tweet;
-	            database.executeQuery(queryEvid, function (resu) {
-	              var Ev_id = resu[0].Ev_id;
-	              var queryHid = "SELECT H_id, H_nom FROM Hashtag";
-	              database.executeQuery(queryHid, function (r) {
-	                for(var i = 0; i < r.length; i++){
-	                  for(var j = 0; j < hashtags.length; j++){
-	                    if(r[i].H_nom == hashtags[j]){
-	                      var H_id = r[i].H_id;
-	                      var queryInsertAssoEH = "INSERT INTO AssoEventHashtag (Ev_id, H_id) VALUES (" + Ev_id + ", " + H_id + ")";
-	                      database.executeQuery(queryInsertAssoEH);
-	                    }
-	                  }
-	                }
-	              });
-	            });
-	            console.log("BDD Add of the event");
-	          }
-	          else{
-	            //TODO MàJ
-	            console.log("Event already present")
-	            var queryUpdate = "UPDATE....";
-	          }
+	          	if(ok){
+		            var queryInsertEvent = "INSERT INTO Event (Ev_Date, Ev_lg, Ev_lat, Ev_descr, Ev_traite, Ev_nb_tweets) VALUES (NOW(), " +
+		                   lng_tweet + ", " + lat_tweet + ", \"" + tweet.text + "\", FALSE, 1)";
+		            database.executeQuery(queryInsertEvent);
+
+		            var queryEvid = "SELECT Ev_id FROM Event WHERE Ev_lg = " + lng_tweet + " AND Ev_lat = " + lat_tweet;
+		            database.executeQuery(queryEvid, function (resu) {
+		              var Ev_id = resu[0].Ev_id;
+		              var queryHid = "SELECT H_id, H_nom FROM Hashtag";
+		              database.executeQuery(queryHid, function (r) {
+		                for(var i = 0; i < r.length; i++){
+		                  for(var j = 0; j < hashtags.length; j++){
+		                    if(r[i].H_nom == hashtags[j]){
+		                      var H_id = r[i].H_id;
+		                      var queryInsertAssoEH = "INSERT INTO AssoEventHashtag (Ev_id, H_id) VALUES (" + Ev_id + ", " + H_id + ")";
+		                      database.executeQuery(queryInsertAssoEH);
+		                    }
+		                  }
+		                }
+		              });
+		            });
+		            console.log("[BDD] Add of the event");
+		        }
+		        else{
+		            console.log("[NOTIFY] Event already present")
+		            if(Ev_id != -1){
+		            	var queryNbTweets = "SELECT Ev_nb_tweets FROM Event WHERE Ev_id = " + Ev_id;
+		            	var nb = 1;
+		            	database.executeQuery(queryNbTweets, function (res) {
+		            		nb = res[0].Ev_nb_tweets;
+		            		nb++;
+		            		var queryUpdate = "UPDATE Event SET Ev_nb_tweets = " + nb +" WHERE Ev_id = " + Ev_id;
+		            		database.executeQuery(queryUpdate);
+		            	});
+		            	
+		            }
+		        }
 
 	        });
 	      }
