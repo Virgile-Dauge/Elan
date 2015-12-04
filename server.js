@@ -47,8 +47,33 @@ require('./app/route.js')(app, database, io, router, twitter);
 require('./app/REST.js')(app, client, database, io, router, twitter);
 
 /**** Connection DB - Server ****/
-database.connect('localhost', 'root', 'roger12345', 'elan');
-
+var users = {
+   "user1" : {
+      "name" : "mahesh",
+	  "password" : "password1",
+	  "profession" : "teacher",
+	  "id": 1
+   },
+   "user2" : {
+      "name" : "suresh",
+	  "password" : "password2",
+	  "profession" : "librarian",
+	  "id": 2
+   },
+   "user3" : {
+      "name" : "ramesh",
+	  "password" : "password3",
+	  "profession" : "clerk",
+	  "id": 3
+   }
+};
+app.get('/listUsers', function (req, res) {
+       console.log( users );
+       res.end( users );
+   });
+})
+//database.connect('localhost', 'root', 'roger12345', 'elan');
+database.connect('localhost', 'root', 'p4nd4', 'ndi');
 database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	  var track = "";
 	  for (var i = 0; i < res.length; i++) {
@@ -64,7 +89,7 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	        var lng_tweet = tweet.place.bounding_box.coordinates[0][0][0];
 	        var lat_tweet = tweet.place.bounding_box.coordinates[0][0][1];
 	        console.log(lat_tweet + " " + lng_tweet);
-	        
+
 	        var hashtags = [];
 	        for(var i = 0; i < tweet.entities.hashtags.length; i++)
 	          for(var j = 0; j < res.length; j++)
@@ -86,7 +111,7 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 		            if(Math.abs(lg-lng_tweet) <= epsilon && Math.abs(lat-lat_tweet) <= epsilon){
 		            	Ev_id = result[i].Ev_id;
 		            	var queryHid = "SELECT H_nom FROM Hashtag h, AssoEventHashtag a WHERE a.Ev_id = " + Ev_id + " AND a.H_id = h.H_id";
-		            	//# that are bounds to an event		            	
+		            	//# that are bounds to an event
 		            	database.executeQuery(queryHid, function (resu) {
 		            		for(var j = 0; j < resu.length; j++)
 		            			for(var k = 0; k < hashtags.length; k++)
@@ -131,7 +156,7 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 		            		var queryUpdate = "UPDATE Event SET Ev_nb_tweets = " + nb +" WHERE Ev_id = " + Ev_id;
 		            		database.executeQuery(queryUpdate);
 		            	});
-		            	
+
 		            }
 		        }
 
