@@ -43,8 +43,7 @@ app.use(cookieParser());
 app.use('/', router);
 
 /**** Include routing & socket ****/
-require('./app/route.js')(app, database, io, router, twitter);
-require('./app/REST.js')(app, client, database, io, router, twitter);
+
 
 /**** Connection DB - Server ****/
 var users = {
@@ -67,11 +66,10 @@ var users = {
 	  "id": 3
    }
 };
-app.get('/listUsers', function (req, res) {
+router.get('/listUsers', function (req, res) {
        console.log( users );
-       res.end( users );
+       res.send( users );
    });
-})
 //database.connect('localhost', 'root', 'roger12345', 'elan');
 database.connect('localhost', 'root', 'p4nd4', 'ndi');
 database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
@@ -167,6 +165,6 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	    });
 	});
 });
-
+module.exports = router;
 /**** Listenning ****/
-server.listen(8080);
+server.listen(80);
