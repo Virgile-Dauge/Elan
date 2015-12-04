@@ -1,5 +1,5 @@
 
-app.controller('mainCtrl', function(NgMap,myService) {
+app.controller('mainCtrl', function($scope, NgMap,myService) {
   var vm = this;
 
     NgMap.getMap().then(function(map) {
@@ -29,5 +29,19 @@ app.controller('mainCtrl', function(NgMap,myService) {
     vm.map.hideInfoWindow('infow');
   };
 
+   vm.placeChanged = function() {
+     vm.place = this.getPlace();
+     
+     $scope.$apply(function(){
+      myLatLng = new google.maps.LatLng(vm.place.geometry.location.lat(), vm.place.geometry.location.lng());
+      //vm.map.setCenter(myLatLng);
+      vm.map.panTo(myLatLng);
+      vm.map.setZoom(10);
+     })
+}
 });
+
+
+
+
 

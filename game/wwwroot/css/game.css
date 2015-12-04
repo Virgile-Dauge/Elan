@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#game {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+}
+
+#game #spaceship {
+    position: fixed;
+    width: 1%;
+    height: 0;
+    padding-bottom: 1%;
+    bottom: 5%;
+    background-color: #fff;
+}
+
+#game .projectile {
+    position: fixed;
+    width: 3px;
+    height: 15px;
+    background-color: #fff;
+}
+
+#game .enemy {
+    position: fixed;
+    width: 1%;
+    height: 0;
+    padding-bottom: 1%;
+    top: 5%;
+    background-color: #f00;
+}
+
+#game .projectile.ep {
+    background-color: #f00;
+}
