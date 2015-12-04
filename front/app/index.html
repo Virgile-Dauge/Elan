@@ -35,10 +35,12 @@
         <a class="navbar-brand" href="#">
           <img style="max-height:200%;max-width:200%; margin-top: -7px;" src="img/Logo.png" alt="ELAN">
         </a>
-          <a class="navbar-brand" href="#" style="font-family: lobster">E.L.A.N.</a>
-
+        <a class="navbar-brand" href="#" style="font-family: lobster;font-size: 200%">E.L.A.N.</a>
+        <p class="navbar-text" style="font-family: lobster">Emergency Localisation Alert Network</p>
       </div>
       <div class="navbar-form navbar-right" role="search">
+        <button type="button" class="btn btn-default navbar-btn" ng-click="centerMap()">Autour de moi</button>
+
         <input places-auto-complete style="width: 350px"
                class="form-control"
                ng-model="vm.address"
