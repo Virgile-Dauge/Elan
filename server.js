@@ -46,9 +46,9 @@ app.use('/', router);
 
 
 /**** Connection DB - Server ****/
-//database.connect('localhost', 'root', 'roger12345', 'elan');
-database.connect('localhost', 'root', 'p4nd4', 'ndi');
-database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
+database.connect('localhost', 'root', 'p4nd4', 'elan');
+//database.connect('localhost', 'root', 'p4nd4', 'ndi');
+database.executeQuery("SELECT H_nom FROM hashtag", function (res) {
 	  var track = "";
 	  for (var i = 0; i < res.length; i++) {
 	    track = track + "#" + res[i].H_nom;
@@ -73,7 +73,7 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	        for(var i = 0; i < hashtags.length; i++)
 	          console.log(hashtags[i]);
 
-	        var queryLgLat = "SELECT Ev_id, Ev_lg, Ev_lat FROM Event";
+	        var queryLgLat = "SELECT Ev_id, Ev_lg, Ev_lat FROM event";
 	        database.executeQuery(queryLgLat, function (result) {
 	          	var ok = true;
 	          	var Ev_id = -1;
@@ -84,7 +84,7 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 		            //Same coordinates
 		            if(Math.abs(lg-lng_tweet) <= epsilon && Math.abs(lat-lat_tweet) <= epsilon){
 		            	Ev_id = result[i].Ev_id;
-		            	var queryHid = "SELECT H_nom FROM Hashtag h, AssoEventHashtag a WHERE a.Ev_id = " + Ev_id + " AND a.H_id = h.H_id";
+		            	var queryHid = "SELECT H_nom FROM hashtag h, assoEventHashtag a WHERE a.Ev_id = " + Ev_id + " AND a.H_id = h.H_id";
 		            	//# that are bounds to an event
 		            	database.executeQuery(queryHid, function (resu) {
 		            		for(var j = 0; j < resu.length; j++)
@@ -97,14 +97,14 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	          	}
 
 	          	if(ok){
-		            var queryInsertEvent = "INSERT INTO Event (Ev_Date, Ev_lg, Ev_lat, Ev_descr, Ev_traite, Ev_nb_tweets) VALUES (NOW(), " +
+		            var queryInsertEvent = "INSERT INTO event (Ev_Date, Ev_lg, Ev_lat, Ev_descr, Ev_traite, Ev_nb_tweets) VALUES (NOW(), " +
 		                   lng_tweet + ", " + lat_tweet + ", \"" + tweet.text + "\", FALSE, 1)";
 		            database.executeQuery(queryInsertEvent);
 
-		            var queryEvid = "SELECT Ev_id FROM Event WHERE Ev_lg = " + lng_tweet + " AND Ev_lat = " + lat_tweet;
+		            var queryEvid = "SELECT Ev_id FROM event WHERE Ev_lg = " + lng_tweet + " AND Ev_lat = " + lat_tweet;
 		            database.executeQuery(queryEvid, function (resu) {
 		              var Ev_id = resu[0].Ev_id;
-		              var queryHid = "SELECT H_id, H_nom FROM Hashtag";
+		              var queryHid = "SELECT H_id, H_nom FROM hashtag";
 		              database.executeQuery(queryHid, function (r) {
 		                for(var i = 0; i < r.length; i++){
 		                  for(var j = 0; j < hashtags.length; j++){
@@ -120,14 +120,14 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 		            console.log("[BDD] Add of the event");
 		        }
 		        else{
-		            console.log("[NOTIFY] Event already present")
+		            console.log("[NOTIFY] event already present")
 		            if(Ev_id != -1){
-		            	var queryNbTweets = "SELECT Ev_nb_tweets FROM Event WHERE Ev_id = " + Ev_id;
+		            	var queryNbTweets = "SELECT Ev_nb_tweets FROM event WHERE Ev_id = " + Ev_id;
 		            	var nb = 1;
 		            	database.executeQuery(queryNbTweets, function (res) {
 		            		nb = res[0].Ev_nb_tweets;
 		            		nb++;
-		            		var queryUpdate = "UPDATE Event SET Ev_nb_tweets = " + nb +" WHERE Ev_id = " + Ev_id;
+		            		var queryUpdate = "UPDATE event SET Ev_nb_tweets = " + nb +" WHERE Ev_id = " + Ev_id;
 		            		database.executeQuery(queryUpdate);
 		            	});
 
@@ -142,22 +142,24 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	});
 });
 router.get('/events', function (req, res) {
-  var myQuery = "SELECT * FROM event, assoeventhashtag, hashtag natural join";
-  database.executeQuery(myQuery, function (res) {
-    var json = [];
+  var myQuery = "SELECT * FROM event e, assoeventhashtag a, hashtag h WHERE e.Ev_id = a.Ev_id AND h.H_id = a.H_id";
+  var json = [];
+  database.executeQuery(myQuery, function (roger) {
     //BLABLA
-    for (var i = 0; i < res.length; i++) {
+	console.log(roger);
+    for (var i = 0; i < roger.length; i++) {
       json.push(JSON.stringify({
-        name: res[i].H_nom,
-        id: res[i].Ev_id,
-        date: res[i].Ev_date,
-        lattitude: res[i].Ev_lat,
-        longitude: res[i].Ev_lg,
-        description: res[i].Ev_descr,
-        nb_tweet: res[i].Ev_nb_tweet
+        name: roger[i].H_nom,
+        id: roger[i].Ev_id,
+        date: roger[i].Ev_date,
+        lattitude: roger[i].Ev_lat,
+        longitude: roger[i].Ev_lg,
+        description: roger[i].Ev_descr,
+        nb_tweet: roger[i].Ev_nb_tweet
       }));
     }
-    result.send(json);;
+});
+    res.send(json);
 });
 module.exports = router;
 /**** Listenning ****/
