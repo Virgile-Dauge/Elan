@@ -86,13 +86,12 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 		            if(Math.abs(lg-lng_tweet) <= epsilon && Math.abs(lat-lat_tweet) <= epsilon){
 		            	Ev_id = result[i].Ev_id;
 		            	var queryHid = "SELECT H_nom FROM Hashtag h, AssoEventHashtag a WHERE a.Ev_id = " + Ev_id + " AND a.H_id = h.H_id";
-		            	ok = false;
 		            	//# that are bounds to an event		            	
 		            	database.executeQuery(queryHid, function (resu) {
 		            		for(var j = 0; j < resu.length; j++)
 		            			for(var k = 0; k < hashtags.length; k++)
 		            				if(resu[j].H_nom == hashtags[k]){
-		            					ok = true;
+		            					ok = false;
 		            				}
 		            	});
 		            }
