@@ -15,6 +15,26 @@ var twitter = require('twitter');
 /**** Custom libraries ****/
 var database = require('./libs/database.js');
 
+var users = {
+   "user1" : {
+      "name" : "mahesh",
+	  "password" : "password1",
+	  "profession" : "teacher",
+	  "id": 1
+   },
+   "user2" : {
+      "name" : "suresh",
+	  "password" : "password2",
+	  "profession" : "librarian",
+	  "id": 2
+   },
+   "user3" : {
+      "name" : "ramesh",
+	  "password" : "password3",
+	  "profession" : "clerk",
+	  "id": 3
+   }
+};
 
 /**** Twitter ****/
 var client = new twitter({
@@ -23,7 +43,6 @@ var client = new twitter({
   access_token_key: '728437002-umsMNJXthkjEN9y0IfQfaxD7iNHwCPrE1I6LbqQJ',
   access_token_secret: '5RZptLSdXsieaWZ0YmZ6SuJEGXxQVUka6EsUySCc7JfwF'
 });
-
 
 /**** App configuration ****/
 app.engine('html', require('ejs').renderFile);
@@ -43,10 +62,17 @@ app.use(cookieParser());
 app.use('/', router);
 
 /**** Include routing & socket ****/
+/*
 require('./app/route.js')(app, database, io, router, twitter);
 require('./app/REST.js')(app, client, database, io, router, twitter);
-
+*/
 /**** Connection DB - Server ****/
+app.get('/listUsers', function (req, res) {
+       console.log( users );
+       res.end( users );
+   });
+})
+
 database.connect('localhost', 'root', 'p4nd4', 'ndi');
 
 database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
@@ -64,7 +90,7 @@ database.executeQuery("SELECT H_nom FROM Hashtag", function (res) {
 	        var lng_tweet = tweet.place.bounding_box.coordinates[0][0][0];
 	        var lat_tweet = tweet.place.bounding_box.coordinates[0][0][1];
 	        console.log(lat_tweet + " " + lng_tweet);
-	        
+
 	        var hashtags = [];
 	        for(var i = 0; i < tweet.entities.hashtags.length; i++)
 	          for(var j = 0; j < res.length; j++)
