@@ -4,5 +4,6 @@
 
 var app = angular.module("app", [
   'uiGmapgoogle-maps',
-  'ngMap'
+  'ngMap',
+  'ngRoute'
 ]);

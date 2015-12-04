@@ -16,19 +16,27 @@
   <link rel="stylesheet" href="components/startbootstrap-freelancer-1.0.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="components/startbootstrap-freelancer-1.0.4/css/freelancer.css">
 
+  <!-- Custom Fonts -->
+  <link href="components/startbootstrap-freelancer-1.0.4/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+
   <style>
     .angular-google-map-container { height: 1000px; }
   </style>
 
 <body ng-controller="mainCtrl as vm" style="height:100%;">
 
+
   <nav class="navbar navbar-default" style="width:100%; position:absolute;top:0px; z-index:10; margin:0px;">
     <div class="container-fluid">
-      <div class="navbar-header" >
+      <div class="navbar-header page-scroll" >
         <a class="navbar-brand" href="#">
           <img style="max-height:200%;max-width:200%; margin-top: -7px;" src="img/Logo.png" alt="ELAN">
         </a>
-        <p class="navbar-text" style="font-family: lobster">E.L.A.N.</p>
+          <a class="navbar-brand" href="#" style="font-family: lobster">E.L.A.N.</a>
+
       </div>
       <div class="navbar-form navbar-right" role="search">
         <input places-auto-complete style="width: 350px"
@@ -36,53 +44,14 @@
                ng-model="vm.address"
                types="{{types}}"
                on-place-changed="vm.placeChanged()" />
-        <button type="button" class="btn btn-default navbar-btn">A propos</button>
+        <button type="button" class="btn btn-default navbar-btn" ng-click="changeView()">A propos</button>
 
       </div>
 
     </div><!-- /.container-fluid -->
   </nav>
 
-
-
-
-  <div style="height:100%;">
-    <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;" on-click="vm.hideAside()">
-      <div ng-repeat="myEvent in vm.events | orderBy:'-position[0]':reverse">
-      <shape id='{{myEvent.name}}' name="circle"  no-watcher="true"
-        stroke-color={{myEvent.color}}
-        stroke-opacity="0.8"
-        stroke-weight="2"
-        fill-color={{myEvent.color}}
-        fill-opacity="0.35"
-        center="{{myEvent.position}}"
-        radius="{{vm.getRadius(myEvent.population)}}"
-        on-mouseover="vm.showDetail(myEvent)"
-        on-mouseout="vm.hideDetail(myEvent)"
-        on-click="vm.showAside(myEvent)">
-      </shape>
-      <custom-marker id="can" position="{{myEvent.position}}">
-            <img style="height:100px;" ng-src="img/{{myEvent.name}}.png"/ >
-      </custom-marker>
-    </div>
-      <info-window id='infow' position='{{vm.cEvent.position}}'>
-        <div ng-non-bindable>
-          {{vm.cEvent.name}}
-        </div>
-      </info-window>
-    </ng-map>
-</div>
-<div id="aside" style="margin-top:75px;">
-  <div id="colImage" class="col-md-3">
-    <img src="img/IconeProfil.png" style="width:100%;height:100%;"/>
-    <img src="img/IconeTweeter.png"style="width:100%;height:100%;"/>
-    <img src="img/IconeInfo.png" style="width:100%;height:100%;"/>
-    <img src="img/IconeJournaux.png" style="width:100%;height:100%;"/>
-    <img src="img/IconeHistorique.png" style="width:300%;height:300%;margin-left:-50px"/>
-  </div>
-  <div id="colInfo" class="col-md-9">
-  </div>
-</div>
+  <div ng-view style="height: 100%" ></div>
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -114,13 +83,15 @@
 <script src="js/app.js"></script>
 <script src="js/controler.js"></script>
 <script src="js/directive.js"></script>
-<script src="js/routes.js"></script>
 <script src="js/services.js"></script>
+<script src="js/view.js"></script>
 
 <script src="components/version/version-directive.js"></script>
 <script src="components/version/interpolate-filter.js"></script>
 
 <script src="game/game.js"></script>
+
+
 
 <script>
   game.on("defeat", function (level) {
