@@ -1,4 +1,5 @@
 
+<!--
     <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;">
         <shape id='{{myEvent.name}}' name="circle" ng-repeat="myEvent in vm.events" no-watcher="true"
                stroke-color={{myEvent.color}}
@@ -17,3 +18,43 @@
             </div>
         </info-window>
     </ng-map>
+-->
+
+
+<div style="height:100%;">
+    <ng-map center="37.09024, -95.712891" zoom="4" mayTypeId="TERRAIN" style="height: 100%; width: 100%;" on-click="vm.hideAside()">
+        <div ng-repeat="myEvent in vm.events | orderBy:'-position[0]':reverse">
+            <shape id='{{myEvent.name}}' name="circle"  no-watcher="true"
+                   stroke-color={{myEvent.color}}
+                   stroke-opacity="0.8"
+                   stroke-weight="2"
+                   fill-color={{myEvent.color}}
+                   fill-opacity="0.35"
+                   center="{{myEvent.position}}"
+                   radius="{{vm.getRadius(myEvent.population)}}"
+                   on-mouseover="vm.showDetail(myEvent)"
+                   on-mouseout="vm.hideDetail(myEvent)"
+                   on-click="vm.showAside(myEvent)">
+            </shape>
+            <custom-marker id="can" position="{{myEvent.position}}">
+                <img style="height:100px;" ng-src="img/{{myEvent.name}}.png"/ >
+            </custom-marker>
+        </div>
+        <info-window id='infow' position='{{vm.cEvent.position}}'>
+            <div ng-non-bindable>
+                {{vm.cEvent.name}}
+            </div>
+        </info-window>
+    </ng-map>
+</div>
+<div id="aside" style="margin-top:75px;">
+    <div id="colImage" class="col-md-3">
+        <img src="img/IconeProfil.png" style="width:100%;height:100%;"/>
+        <img src="img/IconeTweeter.png"style="width:100%;height:100%;"/>
+        <img src="img/IconeInfo.png" style="width:100%;height:100%;"/>
+        <img src="img/IconeJournaux.png" style="width:100%;height:100%;"/>
+        <img src="img/IconeHistorique.png" style="width:300%;height:300%;margin-left:-50px"/>
+    </div>
+    <div id="colInfo" class="col-md-9">
+    </div>
+</div>
