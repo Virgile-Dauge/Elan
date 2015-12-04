@@ -29,16 +29,63 @@ app.controller('mainCtrl', function($scope, NgMap,myService) {
     vm.map.hideInfoWindow('infow');
   };
 
-   vm.placeChanged = function() {
-     vm.place = this.getPlace();
-     
-     $scope.$apply(function(){
-      myLatLng = new google.maps.LatLng(vm.place.geometry.location.lat(), vm.place.geometry.location.lng());
-      //vm.map.setCenter(myLatLng);
-      vm.map.panTo(myLatLng);
-      vm.map.setZoom(10);
-     })
-}
+  vm.placeChanged = function() {
+   vm.place = this.getPlace();
+   
+   $scope.$apply(function(){
+    myLatLng = new google.maps.LatLng(vm.place.geometry.location.lat(), vm.place.geometry.location.lng());
+    //vm.map.setCenter(myLatLng);
+    vm.map.panTo(myLatLng);
+    vm.map.setZoom(10);
+   })
+  }
+
+  /*Aside management*/
+
+  var isAsideVisible = false;
+
+  vm.showAside = function(myEvent){
+    console.log(isAsideVisible);
+    if(!isAsideVisible){
+      console.log("Affichage");
+      var aside = document.querySelector("#aside");
+
+      var width = 300,
+          i = 0,
+          fn = function () {
+              aside.style.width = i +"px";
+              if (i < width) {
+                  i+=5;
+                  setTimeout(function () {
+                      fn();
+                  }, 10);
+              }
+          };
+      fn();
+    }
+    isAsideVisible = true;
+  };
+
+  vm.hideAside = function(){
+    if(isAsideVisible){
+      var aside = document.querySelector("#aside");
+
+        var width = 300,
+            i = 0,
+            fn = function () {
+                aside.style.width = (width-i) +"px";
+                if (i < width) {
+                    i+=5;
+                    setTimeout(function () {
+                        fn();
+                    }, 10);
+                }
+            };
+        fn();
+    }
+    isAsideVisible = false;
+  };
+
 });
 
 
